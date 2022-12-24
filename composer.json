@@ -17,12 +17,15 @@
   },
   "autoload": {
     "psr-4": {
-      "Dto\\": "src"
+      "Collection\\": "src"
     }
   },
   "autoload-dev": {
     "psr-4": {
       "Tests\\": "tests"
     }
+  },
+  "scripts": {
+    "test": "./vendor/bin/phpunit -c phpunit.xml"
   }
 }
