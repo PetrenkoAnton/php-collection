@@ -1,12 +1,14 @@
 {
   "name": "petrenkoanton/php-collection",
-  "description": "",
+  "description": "Custom collection implementation",
+  "keywords": ["collection", "structure"],
   "minimum-stability": "stable",
-  "license": "proprietary",
+  "license": "MIT",
   "authors": [
     {
       "name": "Anton Petrenko",
-      "email": "antptrnk@gmail.com"
+      "email": "antptrnk@gmail.com",
+      "role": "Developer"
     }
   ],
   "require": {

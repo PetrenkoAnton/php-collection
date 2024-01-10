@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: .docker/php81/Dockerfile
+    image: php81-collection
+    container_name: php-collection
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www

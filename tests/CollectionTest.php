@@ -24,6 +24,7 @@ class CollectionTest extends TestCase
 {
     private int $firstEntityId;
     private int $secondEntityId;
+    private int $fourthEntityId;
     private SecondEntity $secondEntity;
     private FourthEntity $fourthEntity;
     private Collection $collection;
