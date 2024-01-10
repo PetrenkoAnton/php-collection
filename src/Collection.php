@@ -51,7 +51,7 @@ abstract class Collection implements Countable, Collectable, Arrayable
         return $this->items[$key] ?? throw new InvalidKeyCollectionException($this::class, $key);
     }
 
-    public function first(): mixed
+    public function first(): ?Collectable
     {
         $first = \reset($this->items);
 
