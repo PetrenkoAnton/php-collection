@@ -28,6 +28,10 @@ php-v:
 	docker exec -it php-collection php -v
 .PHONY: php -v
 
+v:
+	docker exec -it php-collection cat VERSION
+.PHONY: v
+
 test:
 	docker exec -it php-collection ./vendor/bin/phpunit
 .PHONY: test
