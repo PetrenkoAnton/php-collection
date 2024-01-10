@@ -9,19 +9,23 @@ inside:
 .PHONY: inside
 
 up80:
-	docker-compose -f docker-compose-php80.yml up -d
+	docker-compose -f .docker/php80/docker-compose.yml up -d
 .PHONY: up80
 
 up81:
-	docker-compose -f docker-compose-php81.yml up -d
+	docker-compose -f .docker/php81/docker-compose.yml up -d
 .PHONY: up81
 
 up82:
-	docker-compose -f docker-compose-php82.yml up -d
+	docker-compose -f .docker/php82/docker-compose.yml up -d
 .PHONY: up82
 
+up83:
+	docker-compose -f .docker/php83/docker-compose.yml up -d
+.PHONY: up83
+
 down:
-	docker-compose -f docker-compose-php80.yml down
+	docker stop php-collection && docker rm php-collection
 .PHONY: down
 
 php-v:

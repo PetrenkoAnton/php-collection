@@ -3,10 +3,16 @@ services:
   app:
     build:
       context: .
-      dockerfile: .docker/php82/Dockerfile
-    image: php82-collection
+      dockerfile: Dockerfile
+    image: php83-collection
     container_name: php-collection
     restart: unless-stopped
     working_dir: /var/www/
     volumes:
-      - ./:/var/www
+      - ../../:/var/www
+    networks:
+      - default
+
+networks:
+  default:
+    name: php-collection
