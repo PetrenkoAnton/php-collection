@@ -9,6 +9,7 @@ use Collection\Exception\CollectionException\InvalidItemTypeCollectionException;
 use Collection\Exception\CollectionException\InvalidKeyCollectionException;
 use Countable;
 use ReflectionClass;
+use ReflectionException;
 
 abstract class Collection implements Countable, Collectable, Arrayable
 {
@@ -32,7 +33,7 @@ abstract class Collection implements Countable, Collectable, Arrayable
     public function filter(callable $callback): Collectable
     {
         $copy = clone $this;
-        $copy->items = \array_filter($this->items, $callback);
+        $copy->items = \array_values(\array_filter($this->items, $callback));
 
         return $copy;
     }
@@ -62,10 +63,16 @@ abstract class Collection implements Countable, Collectable, Arrayable
         return \count($this->items);
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function toArray(): array
     {
-        return \array_map(static function (Collectable $item) {
-            return $item->toArray() ?? $item;
+        return \array_map(
+            static function (Collectable $item) {
+                $methodExists = (new ReflectionClass($item))->implementsInterface(Arrayable::class);
+                /** @var $item Arrayable */
+                return $methodExists ? $item->toArray() : $item;
         }, $this->items);
     }
 
@@ -76,7 +83,7 @@ abstract class Collection implements Countable, Collectable, Arrayable
     {
         $expectedClass = (new ReflectionClass($this))->getConstructor()->getParameters()[0]->getType()->getName();
 
-        if ($expectedClass !== $item::class)
+        if (!\is_subclass_of($item, $expectedClass))
             throw new InvalidItemTypeCollectionException($this::class, $expectedClass, $item::class);
     }
 }

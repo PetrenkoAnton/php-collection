@@ -6,7 +6,7 @@ namespace Tests\Fixtures\Entities;
 
 use Collection\Collectable;
 
-interface EntityCollectionInterface extends Collectable
+interface EntityInterface extends Collectable
 {
-
+    public function getId(): int;
 }

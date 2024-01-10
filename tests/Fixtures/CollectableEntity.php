@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tests\Fixtures\Entities;
+namespace Tests\Fixtures;
 
-class SecondEntity implements EntityInterface
+use Collection\Collectable;
+
+class CollectableEntity implements Collectable
 {
     public function __construct(private int $id)
     {

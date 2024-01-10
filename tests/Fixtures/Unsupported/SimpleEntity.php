@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tests\Fixtures\Entities;
+namespace Tests\Fixtures\Unsupported;
 
-class SecondEntity implements EntityInterface
+class SimpleEntity
 {
     public function __construct(private int $id)
     {
