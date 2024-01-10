@@ -70,12 +70,27 @@ class CollectionTest extends TestCase
 
     /**
      * @group ok
+     * @throws InvalidKeyCollectionException
      */
     public function testFirstMethod(): void
     {
         $this->assertEquals(FirstEntity::class, \get_class($this->collection->first()));
         $this->assertEquals($this->firstEntityId, $this->collection->first()->getId());
         $this->assertEquals($this->collection->first(), $this->collection->getItem(0));
+    }
+
+    /**
+     * @group ok
+     * @throws InvalidKeyCollectionException
+     */
+    public function testFirstMethodEmptyCollectionThrowsInvalidKeyCollectionException(): void
+    {
+        $emptyCollection = new EntityCollection();
+
+        $this->expectException(InvalidKeyCollectionException::class);
+        $this->expectExceptionMessage('Collection: Tests\Fixtures\EntityCollection | Invalid key: 0');
+        $this->expectExceptionCode(200);
+        $emptyCollection->first();
     }
 
     /**

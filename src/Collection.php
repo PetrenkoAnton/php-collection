@@ -51,11 +51,12 @@ abstract class Collection implements Countable, Collectable, Arrayable
         return $this->items[$key] ?? throw new InvalidKeyCollectionException($this::class, $key);
     }
 
-    public function first(): ?Collectable
+    /**
+     * @throws InvalidKeyCollectionException
+     */
+    public function first(): Collectable
     {
-        $first = \reset($this->items);
-
-        return false == $first ? null : $first;
+        return \reset($this->items) ?: throw new InvalidKeyCollectionException($this::class, 0);
     }
 
     public function count(): int
