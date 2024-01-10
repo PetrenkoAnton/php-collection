@@ -134,7 +134,7 @@ class CollectionTest extends TestCase
 
         $this->expectException(InvalidItemTypeCollectionException::class);
         $this->expectExceptionMessage(
-            'Collection: Tests\Fixtures\EntityCollection | Expected item type: Tests\Fixtures\Entities\EntityInterface | Given: Tests\Fixtures\Random\Random'
+            'Collection: Tests\Fixtures\EntityCollection | Expected item type: Tests\Fixtures\Entities\EntityInterface | Given: Tests\Fixtures\CollectableEntity'
         );
         $this->expectExceptionCode(100);
         $this->collection->add($item);
@@ -151,7 +151,7 @@ class CollectionTest extends TestCase
         $this->expectException(TypeError::class);
         $this->expectExceptionMessage(
             'Collection\Collection::add(): Argument #1 ($item) must be of type Collection\Collectable, Tests\Fixtures\Unsupported\SimpleEntity given, called in /var/www/tests/CollectionTest.php on line '
-            . __LINE__ + 5
+            . __LINE__ + 3
         );
         $this->expectExceptionCode(0);
         $this->collection->add($item);
