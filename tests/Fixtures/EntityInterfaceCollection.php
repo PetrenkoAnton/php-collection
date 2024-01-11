@@ -7,7 +7,7 @@ namespace Tests\Fixtures;
 use Collection\Collection;
 use Tests\Fixtures\Entities\EntityInterface;
 
-class EntityCollection extends Collection
+class EntityInterfaceCollection extends Collection
 {
     public function __construct(EntityInterface ...$items)
     {
