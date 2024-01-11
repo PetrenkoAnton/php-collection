@@ -84,7 +84,7 @@ abstract class Collection implements Countable, Collectable, Arrayable
     {
         $expectedClass = (new ReflectionClass($this))->getConstructor()->getParameters()[0]->getType()->getName();
 
-        if (!\is_subclass_of($item, $expectedClass))
+        if (!\is_a($item, $expectedClass))
             throw new InvalidItemTypeCollectionException($this::class, $expectedClass, $item::class);
     }
 }
