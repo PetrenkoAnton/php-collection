@@ -11,14 +11,7 @@
             <directory>./tests</directory>
         </testsuite>
     </testsuites>
-    <filter>
-        <whitelist>
-            <whitelist processUncoveredFilesFromWhitelist="true">
-                <directory suffix=".php">./src</directory>
-            </whitelist>
-        </whitelist>
-    </filter>
-    <coverage>
+    <coverage processUncoveredFiles="true">
         <include>
             <directory suffix=".php">./src</directory>
         </include>
