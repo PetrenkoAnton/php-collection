@@ -33,9 +33,18 @@ jobs:
         run: vendor/bin/phpunit --coverage-clover clover.xml
 
       - name: Upload coverage results to Coveralls
-        if: matrix.analysis
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           composer require php-coveralls/php-coveralls -n -W
           vendor/bin/php-coveralls --coverage_clover=clover.xml -v
+
+  finish:
+    needs: test
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@v2
+        with:
+          parallel-finished: true
