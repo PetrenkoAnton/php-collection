@@ -40,7 +40,7 @@ jobs:
           vendor/bin/php-coveralls --coverage_clover=clover.xml -v
 
   finish:
-    needs: test
+    needs: tests
     if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
