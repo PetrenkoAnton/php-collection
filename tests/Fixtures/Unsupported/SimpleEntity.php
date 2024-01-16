@@ -10,6 +10,9 @@ class SimpleEntity
     {
     }
 
+    /**
+     * @psalm-suppress PossiblyUnusedMethod
+     */
     public function getId(): int
     {
         return $this->id;

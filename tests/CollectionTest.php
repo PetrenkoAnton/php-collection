@@ -21,6 +21,9 @@ use Tests\Fixtures\SecondEntityCollection;
 use Tests\Fixtures\Unsupported\SimpleEntity;
 use TypeError;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class CollectionTest extends TestCase
 {
     private int $firstEntityId;
@@ -29,6 +32,11 @@ class CollectionTest extends TestCase
     private SecondEntity $secondEntity;
     private FourthEntity $fourthEntity;
     private Collection $collection;
+
+    private function unusedMethod(): array
+    {
+        return [];
+    }
 
     public function setUp(): void
     {
@@ -64,7 +72,12 @@ class CollectionTest extends TestCase
 
         $this->assertCount(1, $collection);
 
-        $this->assertEquals($this->secondEntityId, $collection->getItem(0)->getId());
+        /**
+         * @var CollectableEntity $entity
+         */
+        $entity = $collection->getItem(0);
+
+        $this->assertEquals($this->secondEntityId, $entity->getId());
     }
 
     /**
@@ -80,6 +93,7 @@ class CollectionTest extends TestCase
 
         /** @var $filtered Collection */
         $this->assertCount(1, $filtered);
+
         $this->assertEquals($this->fourthEntityId, $filtered->getItem(0)->getId());
     }
 
