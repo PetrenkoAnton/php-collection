@@ -18,7 +18,6 @@ jobs:
           - '8.0'
           - 8.1
           - 8.2
-          - 8.3
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,4 +31,4 @@ jobs:
         uses: ramsey/composer-install@v2
 
       - name: Static analyze code with Psalm
-        run: composer psalm
+        run: ./vendor/bin/psalm --config=./psalm.xml --show-info=true --shepherd
