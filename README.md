@@ -8,6 +8,7 @@
 [![PHP Composer](https://github.com/PetrenkoAnton/php-collection/actions/workflows/tests.yml/badge.svg)](https://github.com/PetrenkoAnton/php-collection/actions/workflows/tests.yml)
 [![Coverage Status](https://coveralls.io/repos/github/PetrenkoAnton/php-collection/badge.svg)](https://coveralls.io/github/PetrenkoAnton/php-collection)
 [![type-coverage](https://shepherd.dev/github/petrenkoanton/php-collection/coverage.svg)](https://shepherd.dev/github/petrenkoanton/php-collection)
+[![psalm-level](https://shepherd.dev/github/petrenkoanton/php-collection/level.svg)](https://shepherd.dev/github/petrenkoanton/php-collection)
 
 
 ## License
