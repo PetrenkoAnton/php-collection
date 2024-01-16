@@ -1,4 +1,4 @@
-name: code-validation
+name: static_analysis
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: ["main"]
 
 jobs:
-  code-validation:
+  static_analysis:
     name: Code validation via Psalm and PHP_CodeSniffer
     runs-on: ubuntu-latest
     continue-on-error: false
