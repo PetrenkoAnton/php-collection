@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/packagist/l/petrenkoanton/php-collection)](https://packagist.org/packages/petrenkoanton/php-collection)
 
 [![PHP Composer](https://github.com/PetrenkoAnton/php-collection/actions/workflows/tests.yml/badge.svg)](https://github.com/PetrenkoAnton/php-collection/actions/workflows/tests.yml)
-[![Coverage Status](https://coveralls.io/repos/github/PetrenkoAnton/php-collection/badge.svg?branch=dev)](https://coveralls.io/github/PetrenkoAnton/php-collection?branch=dev)
+[![Coverage Status](https://coveralls.io/repos/github/PetrenkoAnton/php-collection/badge.svg)](https://coveralls.io/github/PetrenkoAnton/php-collection)
 
 
 ## License
