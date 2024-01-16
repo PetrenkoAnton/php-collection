@@ -9,7 +9,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/PetrenkoAnton/php-collection/badge.svg)](https://coveralls.io/github/PetrenkoAnton/php-collection)
 [![type-coverage](https://shepherd.dev/github/petrenkoanton/php-collection/coverage.svg)](https://shepherd.dev/github/petrenkoanton/php-collection)
 [![psalm-level](https://shepherd.dev/github/petrenkoanton/php-collection/level.svg)](https://shepherd.dev/github/petrenkoanton/php-collection)
-
+[![Build Status](https://github.com/petrenkoanton/php-collection/workflows/coding-style/badge.svg)](https://github.com/petrenkoanton/php-collection/actions)
 
 ## License
 

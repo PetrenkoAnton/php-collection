@@ -69,8 +69,8 @@ psalm-t:
 
 composer-psalm:
 	docker exec -it php-collection composer psalm
-.PHONY: composer-test
+.PHONY: composer-psalm
 
 composer-psalm-t:
 	docker exec -it php-collection composer psalm-t
-.PHONY: composer-test-c
+.PHONY: composer-psalm-t

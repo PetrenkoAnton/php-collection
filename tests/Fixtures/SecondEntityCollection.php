@@ -11,6 +11,6 @@ class SecondEntityCollection extends Collection
 {
     public function __construct(SecondEntity ...$items)
     {
-        parent::__construct(... $items);
+        parent::__construct(...$items);
     }
 }

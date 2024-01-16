@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Collection\Exception;
 
-class CollectionException extends \Exception
+use Exception;
+
+class CollectionException extends Exception
 {
     public const INVALID_ITEM_TYPE = 100;
     public const INVALID_KEY = 200;
