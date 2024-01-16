@@ -4,4 +4,3 @@ vendor
 .phpunit.result.cache
 /tests/output
 !/tests/output/.gitkeep
-phpunit.xml
