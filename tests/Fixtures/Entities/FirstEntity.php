@@ -6,7 +6,7 @@ namespace Tests\Fixtures\Entities;
 
 use Collection\Arrayable;
 
-class FirstEntity implements EntityInterface, Arrayable
+class FirstEntity implements Arrayable, EntityInterface
 {
     public function __construct(private int $id)
     {

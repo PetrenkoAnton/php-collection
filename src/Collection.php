@@ -11,11 +11,21 @@ use Countable;
 use ReflectionClass;
 use ReflectionException;
 
+use function array_filter;
+use function array_map;
+use function array_values;
+use function count;
+use function is_a;
+use function reset;
+
 /**
  * @psalm-suppress UnusedClass
  */
-abstract class Collection implements Countable, Collectable, Arrayable
+abstract class Collection implements Arrayable, Collectable, Countable
 {
+    /**
+     * @var Collectable[]
+     */
     protected array $items = [];
 
     public function __construct(Collectable ...$items)
@@ -36,7 +46,7 @@ abstract class Collection implements Countable, Collectable, Arrayable
     public function filter(callable $callback): Collectable
     {
         $copy = clone $this;
-        $copy->items = \array_values(\array_filter($this->items, $callback));
+        $copy->items = array_values(array_filter($this->items, $callback));
 
         return $copy;
     }
@@ -59,12 +69,12 @@ abstract class Collection implements Countable, Collectable, Arrayable
      */
     public function first(): Collectable
     {
-        return \reset($this->items) ?: throw new InvalidKeyCollectionException($this::class, 0);
+        return reset($this->items) ?: throw new InvalidKeyCollectionException($this::class, 0);
     }
 
     public function count(): int
     {
-        return \count($this->items);
+        return count($this->items);
     }
 
     /**
@@ -72,13 +82,16 @@ abstract class Collection implements Countable, Collectable, Arrayable
      */
     public function toArray(): array
     {
-        return \array_map(
-            static function (Collectable $item): Collectable|array {
+        return array_map(
+            static function (Collectable $item): Collectable | array {
                 /** @var Collectable|Arrayable $item */
                 $methodExists = (new ReflectionClass($item))->implementsInterface(Arrayable::class);
+
                 /** @psalm-suppress PossiblyUndefinedMethod */
                 return $methodExists ? $item->toArray() : $item;
-        }, $this->items);
+            },
+            $this->items,
+        );
     }
 
     /**
@@ -89,7 +102,8 @@ abstract class Collection implements Countable, Collectable, Arrayable
         /** @psalm-suppress UndefinedMethod */
         $expectedClass = (new ReflectionClass($this))->getConstructor()?->getParameters()[0]?->getType()->getName();
 
-        if (!\is_a($item, $expectedClass))
+        if (!is_a($item, $expectedClass)) {
             throw new InvalidItemTypeCollectionException($this::class, $expectedClass, $item::class);
+        }
     }
 }

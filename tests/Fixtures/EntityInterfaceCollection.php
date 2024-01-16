@@ -11,6 +11,6 @@ class EntityInterfaceCollection extends Collection
 {
     public function __construct(EntityInterface ...$items)
     {
-        parent::__construct(... $items);
+        parent::__construct(...$items);
     }
 }

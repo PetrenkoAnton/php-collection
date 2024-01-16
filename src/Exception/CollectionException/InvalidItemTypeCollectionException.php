@@ -6,16 +6,18 @@ namespace Collection\Exception\CollectionException;
 
 use Collection\Exception\CollectionException;
 
+use function sprintf;
+
 final class InvalidItemTypeCollectionException extends CollectionException
 {
     public function __construct(string $collection, string $expected, string $given)
     {
         parent::__construct(
-            message: \sprintf(
+            message: sprintf(
                 'Collection: %s | Expected item type: %s | Given: %s',
                 $collection,
                 $expected,
-                $given
+                $given,
             ),
             code: self::INVALID_ITEM_TYPE,
         );

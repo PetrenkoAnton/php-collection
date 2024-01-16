@@ -21,6 +21,8 @@ use Tests\Fixtures\SecondEntityCollection;
 use Tests\Fixtures\Unsupported\SimpleEntity;
 use TypeError;
 
+use function get_class;
+
 /**
  * @psalm-suppress UnusedClass
  */
@@ -41,13 +43,16 @@ class CollectionTest extends TestCase
         $this->fourthEntity = new FourthEntity($this->fourthEntityId);
 
         $this->collection = new EntityInterfaceCollection(
-            new FirstEntity($this->firstEntityId), $this->secondEntity, new ThirdEntity($thirdEntityId),
+            new FirstEntity($this->firstEntityId),
+            $this->secondEntity,
+            new ThirdEntity($thirdEntityId),
         );
     }
 
     /**
-     * @group ok
      * @throws CollectionException
+     *
+     * @group ok
      */
     public function testCountMethod(): void
     {
@@ -57,8 +62,9 @@ class CollectionTest extends TestCase
     }
 
     /**
-     * @group ok
      * @throws CollectionException
+     *
+     * @group ok
      */
     public function testAddMethodArgumentDeclarationIsNotInterface(): void
     {
@@ -76,17 +82,18 @@ class CollectionTest extends TestCase
     }
 
     /**
-     * @group ok
      * @throws CollectionException
+     *
+     * @group ok
      */
     public function testFilterMethod(): void
     {
         $this->collection->add($this->fourthEntity);
         $this->assertCount(4, $this->collection);
 
+        /** @var Collection $filtered */
         $filtered = $this->collection->filter(fn (EntityInterface $item) => $item->getId() > 3);
 
-        /** @var Collection $filtered */
         $this->assertCount(1, $filtered);
 
         /** @var EntityInterface $item */
@@ -95,12 +102,13 @@ class CollectionTest extends TestCase
     }
 
     /**
-     * @group ok
      * @throws InvalidKeyCollectionException
+     *
+     * @group ok
      */
     public function testFirstMethod(): void
     {
-        $this->assertEquals(FirstEntity::class, \get_class($this->collection->first()));
+        $this->assertEquals(FirstEntity::class, get_class($this->collection->first()));
         /** @var EntityInterface $item */
         $item = $this->collection->first();
         $this->assertEquals($this->firstEntityId, $item->getId());
@@ -108,8 +116,9 @@ class CollectionTest extends TestCase
     }
 
     /**
-     * @group ok
      * @throws InvalidKeyCollectionException
+     *
+     * @group ok
      */
     public function testFirstMethodEmptyCollectionThrowsInvalidKeyCollectionException(): void
     {
@@ -131,8 +140,9 @@ class CollectionTest extends TestCase
     }
 
     /**
-     * @group ok
      * @throws InvalidKeyCollectionException
+     *
+     * @group ok
      */
     public function testGetItemMethod(): void
     {
@@ -143,20 +153,21 @@ class CollectionTest extends TestCase
 
         /** @var EntityInterface $item */
         $item = $this->collection->getItem(1);
-        $this->assertEquals($this->secondEntityId, $item ->getId());
+        $this->assertEquals($this->secondEntityId, $item->getId());
     }
 
     /**
-     * @group ok
      * @throws CollectionException
      * @throws InvalidKeyCollectionException
+     *
+     * @group ok
      * @dataProvider dpInvalidKeys
      */
     public function testGetItemMethodInvalidKeyThrowsInvalidKeyCollectionException(int $invalidKey): void
     {
         $this->expectException(InvalidKeyCollectionException::class);
         $this->expectExceptionMessage(
-            'Collection: Tests\Fixtures\EntityInterfaceCollection | Invalid key: ' . $invalidKey
+            'Collection: Tests\Fixtures\EntityInterfaceCollection | Invalid key: ' . $invalidKey,
         );
         $this->expectExceptionCode(200);
 
@@ -175,8 +186,9 @@ class CollectionTest extends TestCase
     }
 
     /**
-     * @group ok
      * @throws CollectionException
+     *
+     * @group ok
      */
     public function testAddMethodInvalidItemThrowsInvalidItemTypeCollectionException(): void
     {
@@ -184,15 +196,17 @@ class CollectionTest extends TestCase
 
         $this->expectException(InvalidItemTypeCollectionException::class);
         $this->expectExceptionMessage(
-            'Collection: Tests\Fixtures\EntityInterfaceCollection | Expected item type: Tests\Fixtures\Entities\EntityInterface | Given: Tests\Fixtures\CollectableEntity'
+            // phpcs:ignore
+            'Collection: Tests\Fixtures\EntityInterfaceCollection | Expected item type: Tests\Fixtures\Entities\EntityInterface | Given: Tests\Fixtures\CollectableEntity',
         );
         $this->expectExceptionCode(100);
         $this->collection->add($item);
     }
 
     /**
-     * @group ok
      * @throws CollectionException
+     *
+     * @group ok
      */
     public function testAddMethodInvalidItemThrowsException(): void
     {
@@ -200,15 +214,17 @@ class CollectionTest extends TestCase
 
         $this->expectException(TypeError::class);
         $this->expectExceptionMessageMatches(
-            '/^(Collection\\\Collection::add(): Argument #1 \($item\) must be of type Collection\\\Collectable\\, Tests\\\Fixtures\\\Unsupported\\\SimpleEntity given\\, called in \\/)*/'
+            // phpcs:ignore
+            '/^(Collection\\\Collection::add(): Argument #1 \($item\) must be of type Collection\\\Collectable\\, Tests\\\Fixtures\\\Unsupported\\\SimpleEntity given\\, called in \\/)*/',
         );
         /** @psalm-suppress InvalidArgument */
         $this->collection->add($item);
     }
 
     /**
-     * @group ok
      * @throws ReflectionException
+     *
+     * @group ok
      */
     public function testToArrayMethod(): void
     {
