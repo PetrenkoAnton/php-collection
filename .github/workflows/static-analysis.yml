@@ -32,4 +32,4 @@ jobs:
         uses: ramsey/composer-install@v2
 
       - name: Static analyze code with Psalm
-        run: composer psalm -- --shepherd
+        run: composer psalm
