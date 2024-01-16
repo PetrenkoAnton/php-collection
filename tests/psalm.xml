@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <psalm
     errorLevel="7"
     resolveFromConfigFile="true"
@@ -11,7 +11,10 @@
     <projectFiles>
         <directory name="." useStrictTypes="true"/>
         <ignoreFiles>
-            <directory name="output" />
+            <directory name="output"/>
         </ignoreFiles>
     </projectFiles>
+    <plugins>
+        <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
+    </plugins>
 </psalm>

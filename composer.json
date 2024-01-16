@@ -19,7 +19,8 @@
   "require-dev": {
     "phpunit/phpunit": "^9.0",
     "php-coveralls/php-coveralls": "^2.7",
-    "vimeo/psalm": "^5.13"
+    "vimeo/psalm": "^5.13",
+    "psalm/plugin-phpunit": "^0.18.4"
   },
   "autoload": {
     "psr-4": {

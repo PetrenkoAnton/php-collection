@@ -74,13 +74,9 @@ abstract class Collection implements Countable, Collectable, Arrayable
     {
         return \array_map(
             static function (Collectable $item): Collectable|array {
-                /**
-                 * @var Collectable|Arrayable $item
-                 */
+                /** @var Collectable|Arrayable $item */
                 $methodExists = (new ReflectionClass($item))->implementsInterface(Arrayable::class);
-                /**
-                 * @psalm-suppress PossiblyUndefinedMethod
-                 */
+                /** @psalm-suppress PossiblyUndefinedMethod */
                 return $methodExists ? $item->toArray() : $item;
         }, $this->items);
     }
@@ -90,9 +86,7 @@ abstract class Collection implements Countable, Collectable, Arrayable
      */
     private function validate(Collectable $item): void
     {
-        /**
-         * @psalm-suppress UndefinedMethod
-         */
+        /** @psalm-suppress UndefinedMethod */
         $expectedClass = (new ReflectionClass($this))->getConstructor()?->getParameters()[0]?->getType()->getName();
 
         if (!\is_a($item, $expectedClass))

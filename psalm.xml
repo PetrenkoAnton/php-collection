@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <psalm
     errorLevel="7"
     resolveFromConfigFile="true"
@@ -11,7 +11,7 @@
     <projectFiles>
         <directory name="./src" useStrictTypes="true"/>
         <ignoreFiles>
-            <directory name="vendor" />
+            <directory name="vendor"/>
         </ignoreFiles>
     </projectFiles>
 </psalm>
