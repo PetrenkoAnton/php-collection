@@ -1,4 +1,4 @@
-name: static_analysis
+name: code-validation
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
     branches: ["main"]
 
 jobs:
-  static_analysis:
-    name: Code validation via Psalm and PHP_CodeSniffer
+  code-validation:
+    name: Code validation using Psalm and PHP_CodeSniffer
     runs-on: ubuntu-latest
     continue-on-error: false
     strategy:
@@ -30,8 +30,8 @@ jobs:
       - name: Install dependencies with Composer
         uses: ramsey/composer-install@v2
 
-      - name: Code validation via Psalm
+      - name: Code validation using Psalm
         run: ./vendor/bin/psalm --config=./psalm.xml --show-info=true --shepherd
 
-      - name: Code validation via PHP_CodeSniffer
+      - name: Code validation using PHP_CodeSniffer
         run: ./vendor/bin/phpcs --no-cache -v
