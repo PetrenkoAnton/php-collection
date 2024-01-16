@@ -14,8 +14,8 @@ services:
     volumes:
       - ../../:/var/www
       - ./xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ./opcache.ini:/usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
       - ./error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
-      - ./opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
     networks:
       - default
 
