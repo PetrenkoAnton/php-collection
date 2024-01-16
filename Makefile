@@ -58,3 +58,19 @@ test-ok:
 test+:
 	docker exec -it php-collection ./vendor/bin/phpunit --group +
 .PHONY: test+
+
+psalm:
+	docker exec -it php-collection ./vendor/bin/psalm --show-info=true
+.PHONY: psalm
+
+psalm-t:
+	docker exec -it php-collection ./vendor/bin/psalm --config=./tests/psalm.xml --show-info=true
+.PHONY: psalm-t
+
+composer-psalm:
+	docker exec -it php-collection composer psalm
+.PHONY: composer-test
+
+composer-psalm-t:
+	docker exec -it php-collection composer psalm-t
+.PHONY: composer-test-c

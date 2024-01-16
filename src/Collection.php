@@ -11,6 +11,9 @@ use Countable;
 use ReflectionClass;
 use ReflectionException;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 abstract class Collection implements Countable, Collectable, Arrayable
 {
     protected array $items = [];
@@ -23,7 +26,7 @@ abstract class Collection implements Countable, Collectable, Arrayable
     /**
      * @throws CollectionException
      */
-    public function add(Collectable $item)
+    public function add(Collectable $item): void
     {
         $this->validate($item);
 
@@ -70,9 +73,10 @@ abstract class Collection implements Countable, Collectable, Arrayable
     public function toArray(): array
     {
         return \array_map(
-            static function (Collectable $item) {
+            static function (Collectable $item): Collectable|array {
+                /** @var Collectable|Arrayable $item */
                 $methodExists = (new ReflectionClass($item))->implementsInterface(Arrayable::class);
-                /** @var $item Arrayable */
+                /** @psalm-suppress PossiblyUndefinedMethod */
                 return $methodExists ? $item->toArray() : $item;
         }, $this->items);
     }
@@ -82,7 +86,8 @@ abstract class Collection implements Countable, Collectable, Arrayable
      */
     private function validate(Collectable $item): void
     {
-        $expectedClass = (new ReflectionClass($this))->getConstructor()->getParameters()[0]->getType()->getName();
+        /** @psalm-suppress UndefinedMethod */
+        $expectedClass = (new ReflectionClass($this))->getConstructor()?->getParameters()[0]?->getType()->getName();
 
         if (!\is_a($item, $expectedClass))
             throw new InvalidItemTypeCollectionException($this::class, $expectedClass, $item::class);

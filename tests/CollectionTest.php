@@ -21,6 +21,9 @@ use Tests\Fixtures\SecondEntityCollection;
 use Tests\Fixtures\Unsupported\SimpleEntity;
 use TypeError;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class CollectionTest extends TestCase
 {
     private int $firstEntityId;
@@ -64,7 +67,12 @@ class CollectionTest extends TestCase
 
         $this->assertCount(1, $collection);
 
-        $this->assertEquals($this->secondEntityId, $collection->getItem(0)->getId());
+        /**
+         * @var CollectableEntity $entity
+         */
+        $entity = $collection->getItem(0);
+
+        $this->assertEquals($this->secondEntityId, $entity->getId());
     }
 
     /**
@@ -78,9 +86,12 @@ class CollectionTest extends TestCase
 
         $filtered = $this->collection->filter(fn (EntityInterface $item) => $item->getId() > 3);
 
-        /** @var $filtered Collection */
+        /** @var Collection $filtered */
         $this->assertCount(1, $filtered);
-        $this->assertEquals($this->fourthEntityId, $filtered->getItem(0)->getId());
+
+        /** @var EntityInterface $item */
+        $item = $filtered->getItem(0);
+        $this->assertEquals($this->fourthEntityId, $item->getId());
     }
 
     /**
@@ -90,7 +101,9 @@ class CollectionTest extends TestCase
     public function testFirstMethod(): void
     {
         $this->assertEquals(FirstEntity::class, \get_class($this->collection->first()));
-        $this->assertEquals($this->firstEntityId, $this->collection->first()->getId());
+        /** @var EntityInterface $item */
+        $item = $this->collection->first();
+        $this->assertEquals($this->firstEntityId, $item->getId());
         $this->assertEquals($this->collection->first(), $this->collection->getItem(0));
     }
 
@@ -119,12 +132,18 @@ class CollectionTest extends TestCase
 
     /**
      * @group ok
+     * @throws InvalidKeyCollectionException
      */
     public function testGetItemMethod(): void
     {
-        $this->assertEquals($this->firstEntityId, $this->collection->getItem(0)->getId());
+        /** @var EntityInterface $item */
+        $item = $this->collection->getItem(0);
+        $this->assertEquals($this->firstEntityId, $item->getId());
         $this->assertEquals($this->secondEntity, $this->collection->getItem(1));
-        $this->assertEquals($this->secondEntityId, $this->collection->getItem(1)->getId());
+
+        /** @var EntityInterface $item */
+        $item = $this->collection->getItem(1);
+        $this->assertEquals($this->secondEntityId, $item ->getId());
     }
 
     /**
@@ -183,6 +202,7 @@ class CollectionTest extends TestCase
         $this->expectExceptionMessageMatches(
             '/^(Collection\\\Collection::add(): Argument #1 \($item\) must be of type Collection\\\Collectable\\, Tests\\\Fixtures\\\Unsupported\\\SimpleEntity given\\, called in \\/)*/'
         );
+        /** @psalm-suppress InvalidArgument */
         $this->collection->add($item);
     }
 
