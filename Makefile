@@ -8,19 +8,19 @@ inside:
 .PHONY: inside
 
 up80:
-	docker-compose -f docker/php80/docker-compose.yml up -d
+	docker-compose -f docker/docker-compose-php80.yml up -d
 .PHONY: up80
 
 up81:
-	docker-compose -f docker/php81/docker-compose.yml up -d
+	docker-compose -f docker/docker-compose-php81.yml up -d
 .PHONY: up81
 
 up82:
-	docker-compose -f docker/php82/docker-compose.yml up -d
+	docker-compose -f docker/docker-compose-php82.yml up -d
 .PHONY: up82
 
 up83:
-	docker-compose -f docker/php83/docker-compose.yml up -d
+	docker-compose -f docker/docker-compose-php83.yml up -d
 .PHONY: up83
 
 down:
@@ -74,3 +74,15 @@ composer-psalm:
 composer-psalm-t:
 	docker exec -it php-collection composer psalm-t
 .PHONY: composer-psalm-t
+
+phpcs:
+	docker exec -it php-collection ./vendor/bin/phpcs -v
+.PHONY: phpcs
+
+composer-phpcs:
+	docker exec -it php-collection composer phpcs
+.PHONY: composer-phpcs
+
+composer-phpcs-v:
+	docker exec -it php-collection composer phpcs-v
+.PHONY: composer-phpcs-v
