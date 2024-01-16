@@ -15,10 +15,6 @@ jobs:
       fail-fast: false
       matrix:
         php: [8.0, 8.1, 8.2, 8.3]
-        include:
-          - php: 8.0
-            analysis: true
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -36,9 +32,19 @@ jobs:
         run: vendor/bin/phpunit --coverage-clover ./tests/output/clover.xml
 
       - name: Upload coverage results to Coveralls
-        if: matrix.analysis
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_PARALLEL: true
+          COVERALLS_FLAG_NAME: ${{ matrix.php }}
         run: |
           composer require php-coveralls/php-coveralls -n -W
           vendor/bin/php-coveralls --coverage_clover=./tests/output/clover.xml -v --json_path=./tests/output/coveralls-upload.json
+  finish:
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@v2
+        with:
+          parallel-finished: true
+          carryforward: "8.0,8.1,8.2,8.3"
