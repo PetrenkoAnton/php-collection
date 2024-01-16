@@ -1,4 +1,4 @@
-name: code-validation
+name: coding-style
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
     branches: ["main"]
 
 jobs:
-  code-validation:
-    name: Code validation using Psalm and PHP_CodeSniffer
+  coding-style:
+    name: Coding style validation using Psalm and PHP_CodeSniffer
     runs-on: ubuntu-latest
     continue-on-error: false
     strategy:
@@ -30,8 +30,8 @@ jobs:
       - name: Install dependencies with Composer
         uses: ramsey/composer-install@v2
 
-      - name: Code validation using Psalm
+      - name: Coding style validation using Psalm
         run: ./vendor/bin/psalm --config=./psalm.xml --show-info=true --shepherd
 
-      - name: Code validation using PHP_CodeSniffer
+      - name: Coding style validation using PHP_CodeSniffer
         run: ./vendor/bin/phpcs --no-cache -v
