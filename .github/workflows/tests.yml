@@ -1,6 +1,10 @@
 name: Tests
 
-on: [push, pull_request]
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
 jobs:
   tests:
@@ -29,7 +33,7 @@ jobs:
         uses: ramsey/composer-install@v2
 
       - name: Tests
-        run: vendor/bin/phpunit --coverage-clover clover.xml
+        run: vendor/bin/phpunit --coverage-clover ./tests/output/clover.xml
 
       - name: Upload coverage results to Coveralls
         if: matrix.analysis
@@ -37,4 +41,4 @@ jobs:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           composer require php-coveralls/php-coveralls -n -W
-          vendor/bin/php-coveralls --coverage_clover=clover.xml -v
+          vendor/bin/php-coveralls --coverage_clover=./tests/output/clover.xml -v --json_path=./tests/output/coveralls-upload.json
