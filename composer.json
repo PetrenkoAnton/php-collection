@@ -37,17 +37,13 @@
   "scripts": {
     "check-all": [
       "composer install",
-      "@test-c",
+      "@test",
       "@psalm",
-      "@psalm-t",
       "@phpcs"
     ],
-    "test": "./vendor/bin/phpunit",
-    "test-c": "./vendor/bin/phpunit --coverage-text",
+    "test": "./vendor/bin/phpunit --coverage-text",
     "psalm": "./vendor/bin/psalm --config=./psalm.xml",
-    "psalm-t": "./vendor/bin/psalm --config=./tests/psalm.xml",
-    "phpcs": "./vendor/bin/phpcs",
-    "phpcs-v": "./vendor/bin/phpcs -v"
+    "phpcs": "./vendor/bin/phpcs -v"
   },
   "config": {
     "allow-plugins": {
