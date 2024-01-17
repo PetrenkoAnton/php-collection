@@ -56,7 +56,7 @@ class CollectionTest extends TestCase
      */
     public function testCountMethod(): void
     {
-        $this->assertCount(3, $this->collection);
+        $this->assertEquals(3, $this->collection->count());
         $this->collection->add($this->fourthEntity);
         $this->assertCount(4, $this->collection);
     }

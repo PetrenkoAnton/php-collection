@@ -1,76 +1,66 @@
+-include ./docker/.env
+
 .SILENT:
 .NOTPARALLEL:
 
-.DEFAULT_GOAL := inside
+.DEFAULT_GOAL := init
+
+init:
+	cp ./docker/.env.example ./docker/.env && echo Created ./docker/.env
+.PHONY: init
 
 inside:
-	docker exec -it php-collection /bin/bash
+	docker exec -it ${CONTAINER_NAME} /bin/bash
 .PHONY: inside
 
 up80:
-	docker-compose -f docker/php80/docker-compose.yml up -d
+	docker-compose -f docker/docker-compose-php80.yml up -d
 .PHONY: up80
 
 up81:
-	docker-compose -f docker/php81/docker-compose.yml up -d
+	docker-compose -f docker/docker-compose-php81.yml up -d
 .PHONY: up81
 
 up82:
-	docker-compose -f docker/php82/docker-compose.yml up -d
+	docker-compose -f docker/docker-compose-php82.yml up -d
 .PHONY: up82
 
 up83:
-	docker-compose -f docker/php83/docker-compose.yml up -d
+	docker-compose -f docker/docker-compose-php83.yml up -d
 .PHONY: up83
 
 down:
-	docker stop php-collection && docker rm php-collection
+	docker stop ${CONTAINER_NAME} && docker rm ${CONTAINER_NAME}
 .PHONY: down
 
 php-v:
-	docker exec -it php-collection php -v
-.PHONY: php -v
+	docker exec -it ${CONTAINER_NAME} php -v
+.PHONY: php-v
 
 v:
-	docker exec -it php-collection cat VERSION
+	docker exec -it ${CONTAINER_NAME} cat VERSION
 .PHONY: v
 
 test:
-	docker exec -it php-collection ./vendor/bin/phpunit
+	docker exec -it ${CONTAINER_NAME} ./vendor/bin/phpunit
 .PHONY: test
 
 test-c:
-	docker exec -it php-collection ./vendor/bin/phpunit --coverage-text
+	docker exec -it ${CONTAINER_NAME} ./vendor/bin/phpunit --coverage-text
 .PHONY: test-c
 
-composer-test:
-	docker exec -it php-collection composer test
-.PHONY: composer-test
-
-composer-test-c:
-	docker exec -it php-collection composer test-c
-.PHONY: composer-test-c
-
 test-ok:
-	docker exec -it php-collection ./vendor/bin/phpunit --group ok
+	docker exec -it ${CONTAINER_NAME} ./vendor/bin/phpunit --group ok
 .PHONY: test-ok
 
 test+:
-	docker exec -it php-collection ./vendor/bin/phpunit --group +
+	docker exec -it ${CONTAINER_NAME} ./vendor/bin/phpunit --group +
 .PHONY: test+
 
 psalm:
-	docker exec -it php-collection ./vendor/bin/psalm --show-info=true
+	docker exec -it ${CONTAINER_NAME} ./vendor/bin/psalm --show-info=true --no-cache
 .PHONY: psalm
 
-psalm-t:
-	docker exec -it php-collection ./vendor/bin/psalm --config=./tests/psalm.xml --show-info=true
-.PHONY: psalm-t
-
-composer-psalm:
-	docker exec -it php-collection composer psalm
-.PHONY: composer-psalm
-
-composer-psalm-t:
-	docker exec -it php-collection composer psalm-t
-.PHONY: composer-psalm-t
+phpcs:
+	docker exec -it ${CONTAINER_NAME} ./vendor/bin/phpcs -v
+.PHONY: phpcs

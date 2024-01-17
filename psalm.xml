@@ -10,8 +10,13 @@
 >
     <projectFiles>
         <directory name="./src" useStrictTypes="true"/>
+        <directory name="./tests" useStrictTypes="true"/>
         <ignoreFiles>
             <directory name="./vendor"/>
+            <directory name="./tests/output"/>
         </ignoreFiles>
     </projectFiles>
+    <plugins>
+        <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
+    </plugins>
 </psalm>

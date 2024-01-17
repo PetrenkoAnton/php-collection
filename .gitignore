@@ -1,6 +1,6 @@
 /.idea
 vendor
-.env
+docker/.env
 .phpunit.result.cache
 /tests/output
 !/tests/output/.gitkeep
