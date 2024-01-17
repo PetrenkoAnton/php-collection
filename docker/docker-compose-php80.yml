@@ -2,7 +2,7 @@ version: "3.7"
 services:
   app:
     image: antonphp/php80-composer-xdebug:v1.0.0
-    container_name: php-collection
+    container_name: ${CONTAINER_NAME}
     restart: unless-stopped
     working_dir: /var/www/
     environment:
@@ -18,4 +18,4 @@ services:
 
 networks:
   default:
-    name: php-collection
+    name: ${CONTAINER_NAME}

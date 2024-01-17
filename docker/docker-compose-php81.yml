@@ -2,7 +2,7 @@ version: "3.7"
 services:
   app:
     image: antonphp/php81-composer-xdebug:v1.0.0
-    container_name: php-collection
+    container_name: ${CONTAINER_NAME}
     restart: unless-stopped
     working_dir: /var/www/
     environment:
@@ -11,11 +11,11 @@ services:
     volumes:
       - ./../:/var/www
       - ./ini/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-      - ./ini/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
       - ./ini/php-opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
+      - ./ini/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
     networks:
       - default
 
 networks:
   default:
-    name: php-collection
+    name: ${CONTAINER_NAME}

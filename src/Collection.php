@@ -18,9 +18,6 @@ use function count;
 use function is_a;
 use function reset;
 
-/**
- * @psalm-suppress UnusedClass
- */
 abstract class Collection implements Arrayable, Collectable, Countable
 {
     /**
