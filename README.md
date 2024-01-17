@@ -11,6 +11,20 @@
 [![psalm-level](https://shepherd.dev/github/petrenkoanton/php-collection/level.svg)](https://shepherd.dev/github/petrenkoanton/php-collection)
 [![Build Status](https://github.com/petrenkoanton/php-collection/workflows/coding-style/badge.svg)](https://github.com/petrenkoanton/php-collection/actions)
 
+## Installation
+
+```bash
+composer require petrenkoanton/php-collection
+```
+
+## For developers
+
+### Run tests and linters
+
+```bash
+composer check-all
+```
+
 ## License
 
 The php-collection is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
