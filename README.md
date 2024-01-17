@@ -97,7 +97,7 @@ make up83 # php8.3
 Also you need to run this command before build container with another php version:
 
 ```bash
-make down # Removes network and container
+make down # Remove network and container
 ```
 
 Other commands:
