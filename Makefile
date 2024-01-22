@@ -3,7 +3,7 @@
 .SILENT:
 .NOTPARALLEL:
 
-.DEFAULT_GOAL := init
+.DEFAULT_GOAL := inside
 
 init:
 	cp ./docker/.env.example ./docker/.env && echo Created ./docker/.env

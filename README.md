@@ -11,13 +11,13 @@
 [![psalm-level](https://shepherd.dev/github/petrenkoanton/php-collection/level.svg)](https://shepherd.dev/github/petrenkoanton/php-collection)
 [![Build Status](https://github.com/petrenkoanton/php-collection/workflows/coding-style/badge.svg)](https://github.com/petrenkoanton/php-collection/actions)
 
-[Installation](#installation) | [Functionality](#functionality) | [Usage](#usage) | [For developers](#for-developers) | [License](#license)
+[Installation](#installation) | [Functionality](#functionality) | [Usage](#usage) | [For developers](#for-developers) | [License](#license) | [Related projects](#related-projects)
 
 ## Installation
 
 ### Requirements
 
-- PHP8.0 or higher
+- php 8.0 or higher
 
 ### Composer
 
@@ -41,10 +41,12 @@ composer require petrenkoanton/php-collection
 
 ### Exceptions
 
-| Exception                          | Parent               | Message pattern                                               | Code |
-|:-----------------------------------|:---------------------|:--------------------------------------------------------------|------|
-| InvalidItemTypeCollectionException | CollectionException  | Collection: %s &#124; Expected item type: %s &#124; Given: %s | 100  |
-| InvalidKeyCollectionException      | CollectionException  | Collection: %s &#124; Invalid key: %d                         | 200  |
+Main library exception is [CollectionException](./src/Exception/CollectionException.php).
+
+| Code | Message pattern                                               | Exception                          | Parent               |
+|------|:--------------------------------------------------------------|:-----------------------------------|:---------------------|
+| 100  | Collection: %s &#124; Expected item type: %s &#124; Given: %s | InvalidItemTypeCollectionException | CollectionException  |
+| 200  | Collection: %s &#124; Invalid key: %d                         | InvalidKeyCollectionException      | CollectionException  |
 
 ## Usage
 
@@ -79,46 +81,76 @@ Utils:
 
 ### Setup
 
-Initialize:
+#### Initialize
 
+Create `./docker/.env`
 ```bash
-make init # Create ./docker/.env 
+make init 
 ```
 
-Build container with the different php version:
+#### Build container with the different php version
 
+php 8.0
 ```bash
-make up80 # php8.0
-make up81 # php8.1
-make up82 # php8.2
-make up83 # php8.3
+make up80
 ```
 
-Also you need to run this command before build container with another php version:
-
+php 8.1
 ```bash
-make down # Remove network and container
+make up81
 ```
 
-Other commands:
-
+php 8.2
 ```bash
-make inside # Go inside of the container
-make php-v # Check php version
-make v # Check package version
+make up82
+```
+
+php 8.3
+```bash
+make up83
+```
+
+Also you need to run this command before build container with another php version.
+It will remove network and previously created container.
+```bash
+make down
+```
+
+#### Other commands
+
+Go inside of the container
+```bash
+make inside
+```
+
+Check php version
+```bash
+make php-v
+```
+
+Check package version
+```bash
+make v
 ```
 
 ### Run tests and linters
 
-Using `make` util:
-
+Run [PHPUnit](https://github.com/sebastianbergmann/phpunit) tests with code coverage
 ```bash
-make test-c # Run tests with code coverage
-make psalm # Run Psalm
-make phpcs # Run PHP_CSFixer
+make test-c 
 ```
 
-Or from the inside of the container: 
+Run [Psalm](https://github.com/vimeo/psalm)
+```bash
+make psalm
+```
+
+Run [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer)
+```bash
+make phpcs
+```
+
+Or by all-in-one command from the inside of the container
 
 ```bash
 composer check-all
@@ -126,4 +158,9 @@ composer check-all
 
 ## License
 
-The [php-collection](https://github.com/PetrenkoAnton/php-collection/) library is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The [php-collection](https://github.com/PetrenkoAnton/php-collection) library is open-sourced software licensed under the
+[MIT license](https://opensource.org/licenses/MIT).
+
+## Related projects
+
+- [PetrenkoAnton/php-dto](https://github.com/PetrenkoAnton/php-dto)
