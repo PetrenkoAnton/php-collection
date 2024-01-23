@@ -6,11 +6,14 @@ namespace Test;
 
 use Collection\Collection;
 use Collection\Exception\CollectionException;
-use Collection\Exception\CollectionException\InvalidItemTypeCollectionException;
-use Collection\Exception\CollectionException\InvalidKeyCollectionException;
+use Collection\Exception\CollectionException\InvalidConstructorDeclarationException;
+use Collection\Exception\CollectionException\InvalidItemTypeException;
+use Collection\Exception\CollectionException\InvalidKeyException;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
-use Tests\Fixtures\CollectableEntity;
+use Tests\Fixtures\EmptyConstructorWithoutParentCallCollection;
+use Tests\Fixtures\Entities\CollectableEntity;
+use Tests\Fixtures\Entities\CollectableEntityWithoutConstructor;
 use Tests\Fixtures\Entities\EntityInterface;
 use Tests\Fixtures\Entities\FirstEntity;
 use Tests\Fixtures\Entities\FourthEntity;
@@ -19,6 +22,8 @@ use Tests\Fixtures\Entities\ThirdEntity;
 use Tests\Fixtures\EntityInterfaceCollection;
 use Tests\Fixtures\SecondEntityCollection;
 use Tests\Fixtures\Unsupported\SimpleEntity;
+use Tests\Fixtures\UnsupportedConstructorWithoutParentCallCollection;
+use Tests\Fixtures\UnsupportedObjectConstructorWithoutParentCallCollection;
 use TypeError;
 
 use function get_class;
@@ -102,7 +107,7 @@ class CollectionTest extends TestCase
     }
 
     /**
-     * @throws InvalidKeyCollectionException
+     * @throws InvalidKeyException
      *
      * @group ok
      */
@@ -116,7 +121,7 @@ class CollectionTest extends TestCase
     }
 
     /**
-     * @throws InvalidKeyCollectionException
+     * @throws InvalidKeyException
      *
      * @group ok
      */
@@ -124,7 +129,7 @@ class CollectionTest extends TestCase
     {
         $emptyCollection = new EntityInterfaceCollection();
 
-        $this->expectException(InvalidKeyCollectionException::class);
+        $this->expectException(InvalidKeyException::class);
         $this->expectExceptionMessage('Collection: Tests\Fixtures\EntityInterfaceCollection | Invalid key: 0');
         $this->expectExceptionCode(200);
         $emptyCollection->first();
@@ -140,7 +145,7 @@ class CollectionTest extends TestCase
     }
 
     /**
-     * @throws InvalidKeyCollectionException
+     * @throws InvalidKeyException
      *
      * @group ok
      */
@@ -158,14 +163,14 @@ class CollectionTest extends TestCase
 
     /**
      * @throws CollectionException
-     * @throws InvalidKeyCollectionException
+     * @throws InvalidKeyException
      *
      * @group ok
      * @dataProvider dpInvalidKeys
      */
     public function testGetItemMethodInvalidKeyThrowsInvalidKeyCollectionException(int $invalidKey): void
     {
-        $this->expectException(InvalidKeyCollectionException::class);
+        $this->expectException(InvalidKeyException::class);
         $this->expectExceptionMessage(
             'Collection: Tests\Fixtures\EntityInterfaceCollection | Invalid key: ' . $invalidKey,
         );
@@ -186,7 +191,7 @@ class CollectionTest extends TestCase
     }
 
     /**
-     * @throws CollectionException
+     * @throws InvalidItemTypeException
      *
      * @group ok
      */
@@ -194,13 +199,55 @@ class CollectionTest extends TestCase
     {
         $item = new CollectableEntity(4);
 
-        $this->expectException(InvalidItemTypeCollectionException::class);
+        $this->expectException(InvalidItemTypeException::class);
         $this->expectExceptionMessage(
             // phpcs:ignore
-            'Collection: Tests\Fixtures\EntityInterfaceCollection | Expected item type: Tests\Fixtures\Entities\EntityInterface | Given: Tests\Fixtures\CollectableEntity',
+            'Collection: Tests\Fixtures\EntityInterfaceCollection | Expected item type: Tests\Fixtures\Entities\EntityInterface | Given: Tests\Fixtures\Entities\CollectableEntity',
         );
         $this->expectExceptionCode(100);
         $this->collection->add($item);
+    }
+
+    /**
+     * @throws InvalidConstructorDeclarationException
+     *
+     * @group ok
+     * @dataProvider dpInvalidConstructorDeclaration
+     */
+    public function testAddMethodInvalidItemThrowsInvalidItemConstructorException(
+        object $collection,
+        object $item
+    ): void {
+        $this->expectException(InvalidConstructorDeclarationException::class);
+        $this->expectExceptionMessage(
+        // phpcs:ignore
+            sprintf('Collection: %s | Err: Invalid constructor declaration', $collection::class),
+        );
+        $this->expectExceptionCode(101);
+        $collection->add($item);
+    }
+
+    public function dpInvalidConstructorDeclaration(): array
+    {
+        return [
+            [
+                new EmptyConstructorWithoutParentCallCollection(),
+                new CollectableEntityWithoutConstructor(),
+            ],
+            [
+                new UnsupportedConstructorWithoutParentCallCollection('random string'),
+                new CollectableEntityWithoutConstructor(),
+            ],
+            [
+                new UnsupportedObjectConstructorWithoutParentCallCollection(new CollectableEntityWithoutConstructor()),
+                new CollectableEntityWithoutConstructor(),
+            ],
+            [
+                new UnsupportedObjectConstructorWithoutParentCallCollection(new class {
+                }),
+                new CollectableEntityWithoutConstructor(),
+            ],
+        ];
     }
 
     /**
@@ -232,10 +279,14 @@ class CollectionTest extends TestCase
         $this->assertCount(3, $this->collection->toArray());
 
         // Only FirstEntity implements Arrayable interface
+        /** @psalm-suppress PossiblyUndefinedIntArrayOffset */
         $this->assertIsArray($this->collection->toArray()[0]);
+        /** @psalm-suppress PossiblyUndefinedIntArrayOffset */
         $this->assertEquals(['id' => $this->firstEntityId], $this->collection->toArray()[0]);
 
+        /** @psalm-suppress PossiblyUndefinedIntArrayOffset */
         $this->assertEquals(SecondEntity::class, $this->collection->toArray()[1]::class);
+        /** @psalm-suppress PossiblyUndefinedIntArrayOffset */
         $this->assertEquals(ThirdEntity::class, $this->collection->toArray()[2]::class);
     }
 }

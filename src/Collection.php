@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Collection;
 
-use Collection\Exception\CollectionException;
-use Collection\Exception\CollectionException\InvalidItemTypeCollectionException;
-use Collection\Exception\CollectionException\InvalidKeyCollectionException;
+use Collection\Exception\CollectionException\InvalidConstructorDeclarationException;
+use Collection\Exception\CollectionException\InvalidItemTypeException;
+use Collection\Exception\CollectionException\InvalidKeyException;
+use Collection\Exception\Internal\HelperException;
 use Countable;
 use ReflectionClass;
-use ReflectionException;
 
 use function array_filter;
 use function array_map;
@@ -20,9 +20,6 @@ use function reset;
 
 abstract class Collection implements Arrayable, Collectable, Countable
 {
-    /**
-     * @var Collectable[]
-     */
     protected array $items = [];
 
     public function __construct(Collectable ...$items)
@@ -31,7 +28,8 @@ abstract class Collection implements Arrayable, Collectable, Countable
     }
 
     /**
-     * @throws CollectionException
+     * @throws InvalidConstructorDeclarationException
+     * @throws InvalidItemTypeException
      */
     public function add(Collectable $item): void
     {
@@ -54,19 +52,19 @@ abstract class Collection implements Arrayable, Collectable, Countable
     }
 
     /**
-     * @throws InvalidKeyCollectionException
+     * @throws InvalidKeyException
      */
     public function getItem(int $key): Collectable
     {
-        return $this->items[$key] ?? throw new InvalidKeyCollectionException($this::class, $key);
+        return $this->items[$key] ?? throw new InvalidKeyException($this::class, $key);
     }
 
     /**
-     * @throws InvalidKeyCollectionException
+     * @throws InvalidKeyException
      */
     public function first(): Collectable
     {
-        return reset($this->items) ?: throw new InvalidKeyCollectionException($this::class, 0);
+        return reset($this->items) ?: throw new InvalidKeyException($this::class, 0);
     }
 
     public function count(): int
@@ -74,9 +72,6 @@ abstract class Collection implements Arrayable, Collectable, Countable
         return count($this->items);
     }
 
-    /**
-     * @throws ReflectionException
-     */
     public function toArray(): array
     {
         return array_map(
@@ -92,15 +87,20 @@ abstract class Collection implements Arrayable, Collectable, Countable
     }
 
     /**
-     * @throws InvalidItemTypeCollectionException
+     * @throws InvalidConstructorDeclarationException
+     * @throws InvalidItemTypeException
      */
     private function validate(Collectable $item): void
     {
-        /** @psalm-suppress UndefinedMethod */
-        $expectedClass = (new ReflectionClass($this))->getConstructor()?->getParameters()[0]?->getType()->getName();
+        try {
+            $expectedClass = Helper::getConstructorFirstParameterClassName($this);
+        } catch (HelperException) {
+            throw new InvalidConstructorDeclarationException($this::class);
+        }
 
+        /** @psalm-suppress ArgumentTypeCoercion */
         if (!is_a($item, $expectedClass)) {
-            throw new InvalidItemTypeCollectionException($this::class, $expectedClass, $item::class);
+            throw new InvalidItemTypeException($this::class, $expectedClass, $item::class);
         }
     }
 }

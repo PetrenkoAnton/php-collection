@@ -8,7 +8,7 @@ use Collection\Exception\CollectionException;
 
 use function sprintf;
 
-final class InvalidKeyCollectionException extends CollectionException
+final class InvalidKeyException extends CollectionException
 {
     public function __construct(string $collection, int $key)
     {
