@@ -232,10 +232,14 @@ class CollectionTest extends TestCase
         $this->assertCount(3, $this->collection->toArray());
 
         // Only FirstEntity implements Arrayable interface
+        /** @psalm-suppress PossiblyUndefinedIntArrayOffset */
         $this->assertIsArray($this->collection->toArray()[0]);
+        /** @psalm-suppress PossiblyUndefinedIntArrayOffset */
         $this->assertEquals(['id' => $this->firstEntityId], $this->collection->toArray()[0]);
 
+        /** @psalm-suppress PossiblyUndefinedIntArrayOffset */
         $this->assertEquals(SecondEntity::class, $this->collection->toArray()[1]::class);
+        /** @psalm-suppress PossiblyUndefinedIntArrayOffset */
         $this->assertEquals(ThirdEntity::class, $this->collection->toArray()[2]::class);
     }
 }

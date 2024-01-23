@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Collection;
 
-use Collection\Exception\CollectionException;
+use Collection\Exception\CollectionException\InvalidConstructorDeclarationException;
 use Collection\Exception\CollectionException\InvalidItemTypeCollectionException;
 use Collection\Exception\CollectionException\InvalidKeyCollectionException;
 use Countable;
 use ReflectionClass;
-use ReflectionException;
 
 use function array_filter;
 use function array_map;
@@ -20,9 +19,6 @@ use function reset;
 
 abstract class Collection implements Arrayable, Collectable, Countable
 {
-    /**
-     * @var Collectable[]
-     */
     protected array $items = [];
 
     public function __construct(Collectable ...$items)
@@ -31,7 +27,8 @@ abstract class Collection implements Arrayable, Collectable, Countable
     }
 
     /**
-     * @throws CollectionException
+     * @throws InvalidConstructorDeclarationException
+     * @throws InvalidItemTypeCollectionException
      */
     public function add(Collectable $item): void
     {
@@ -74,9 +71,6 @@ abstract class Collection implements Arrayable, Collectable, Countable
         return count($this->items);
     }
 
-    /**
-     * @throws ReflectionException
-     */
     public function toArray(): array
     {
         return array_map(
@@ -92,13 +86,14 @@ abstract class Collection implements Arrayable, Collectable, Countable
     }
 
     /**
+     * @throws InvalidConstructorDeclarationException
      * @throws InvalidItemTypeCollectionException
      */
     private function validate(Collectable $item): void
     {
-        /** @psalm-suppress UndefinedMethod */
-        $expectedClass = (new ReflectionClass($this))->getConstructor()?->getParameters()[0]?->getType()->getName();
+        $expectedClass = Helper::getConstructorFirstParameterClassName($this);
 
+        /** @psalm-suppress ArgumentTypeCoercion */
         if (!is_a($item, $expectedClass)) {
             throw new InvalidItemTypeCollectionException($this::class, $expectedClass, $item::class);
         }

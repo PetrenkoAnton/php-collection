@@ -43,10 +43,11 @@ composer require petrenkoanton/php-collection
 
 Main library exception is [CollectionException](./src/Exception/CollectionException.php).
 
-| Code | Message pattern                                               | Exception                          | Parent               |
-|------|:--------------------------------------------------------------|:-----------------------------------|:---------------------|
-| 100  | Collection: %s &#124; Expected item type: %s &#124; Given: %s | InvalidItemTypeCollectionException | CollectionException  |
-| 200  | Collection: %s &#124; Invalid key: %d                         | InvalidKeyCollectionException      | CollectionException  |
+| Code | Message pattern                                               | Exception                              | Parent               |
+|------|:--------------------------------------------------------------|:---------------------------------------|:---------------------|
+| 100  | Collection: %s &#124; Expected item type: %s &#124; Given: %s | InvalidItemTypeCollectionException     | CollectionException  |
+| 200  | Collection: %s &#124; Invalid key: %d                         | InvalidKeyCollectionException          | CollectionException  |
+| 300  | Collection: %s &#124; Err: Invalid constructor declaration    | InvalidConstructorDeclarationException | CollectionException  |
 
 ## Usage
 
@@ -163,4 +164,4 @@ The [php-collection](https://github.com/PetrenkoAnton/php-collection) library is
 
 ## Related projects
 
-- [PetrenkoAnton/php-dto](https://github.com/PetrenkoAnton/php-dto)
+- [PetrenkoAnton/php-dto](https://github.com/petrenkoanton/php-dto)
