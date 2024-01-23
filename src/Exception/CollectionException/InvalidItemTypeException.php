@@ -8,7 +8,7 @@ use Collection\Exception\CollectionException;
 
 use function sprintf;
 
-final class InvalidItemTypeCollectionException extends CollectionException
+final class InvalidItemTypeException extends CollectionException
 {
     public function __construct(string $collection, string $expected, string $given)
     {

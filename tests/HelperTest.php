@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace Test;
 
-use Collection\Exception\CollectionException\InvalidConstructorDeclarationException;
+use Collection\Exception\Internal\HelperException;
 use Collection\Helper;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\EntityInterfaceCollection;
 use Tests\Fixtures\SecondEntityCollection;
 use Tests\Fixtures\Unsupported\EmptyClass;
 
-use function sprintf;
-
-class HelpersTest extends TestCase
+class HelperTest extends TestCase
 {
     /**
      * @group ok
@@ -39,25 +37,26 @@ class HelpersTest extends TestCase
     }
 
     /**
-     * @throws InvalidConstructorDeclarationException
+     * @throws HelperException
      *
      * @group ok
-     * @dataProvider dpGetConstructorFirstParameterClassNameFunctionThrowsInvalidConstructorDeclarationException
+     * @dataProvider dpGetConstructorFirstParameterClassNameFunctionThrowsHelperException
      */
-    public function testGetConstructorFirstParameterClassNameFunctionThrowsDtoCollectionConstructorException(
+    public function testGetConstructorFirstParameterClassNameFunctionThrowsHelperException(
         object $class,
         string $className,
     ): void {
-        $this->expectException(InvalidConstructorDeclarationException::class);
-        $this->expectExceptionMessage(
-            sprintf('Collection: %s | Err: Invalid constructor declaration', $className),
-        );
-        $this->expectExceptionCode(300);
+        try {
+            Helper::getConstructorFirstParameterClassName($class);
+        } catch (HelperException $exception) {
+            $this->assertEquals($className, $exception->getItemClassName());
+        }
 
+        $this->expectException(HelperException::class);
         Helper::getConstructorFirstParameterClassName($class);
     }
 
-    public function dpGetConstructorFirstParameterClassNameFunctionThrowsInvalidConstructorDeclarationException(): array
+    public function dpGetConstructorFirstParameterClassNameFunctionThrowsHelperException(): array
     {
         return [
             [

@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Collection;
 
 use Collection\Exception\CollectionException\InvalidConstructorDeclarationException;
-use Collection\Exception\CollectionException\InvalidItemTypeCollectionException;
-use Collection\Exception\CollectionException\InvalidKeyCollectionException;
+use Collection\Exception\CollectionException\InvalidItemTypeException;
+use Collection\Exception\CollectionException\InvalidKeyException;
+use Collection\Exception\Internal\HelperException;
 use Countable;
 use ReflectionClass;
 
@@ -28,7 +29,7 @@ abstract class Collection implements Arrayable, Collectable, Countable
 
     /**
      * @throws InvalidConstructorDeclarationException
-     * @throws InvalidItemTypeCollectionException
+     * @throws InvalidItemTypeException
      */
     public function add(Collectable $item): void
     {
@@ -51,19 +52,19 @@ abstract class Collection implements Arrayable, Collectable, Countable
     }
 
     /**
-     * @throws InvalidKeyCollectionException
+     * @throws InvalidKeyException
      */
     public function getItem(int $key): Collectable
     {
-        return $this->items[$key] ?? throw new InvalidKeyCollectionException($this::class, $key);
+        return $this->items[$key] ?? throw new InvalidKeyException($this::class, $key);
     }
 
     /**
-     * @throws InvalidKeyCollectionException
+     * @throws InvalidKeyException
      */
     public function first(): Collectable
     {
-        return reset($this->items) ?: throw new InvalidKeyCollectionException($this::class, 0);
+        return reset($this->items) ?: throw new InvalidKeyException($this::class, 0);
     }
 
     public function count(): int
@@ -87,15 +88,19 @@ abstract class Collection implements Arrayable, Collectable, Countable
 
     /**
      * @throws InvalidConstructorDeclarationException
-     * @throws InvalidItemTypeCollectionException
+     * @throws InvalidItemTypeException
      */
     private function validate(Collectable $item): void
     {
-        $expectedClass = Helper::getConstructorFirstParameterClassName($this);
+        try {
+            $expectedClass = Helper::getConstructorFirstParameterClassName($this);
+        } catch (HelperException) {
+            throw new InvalidConstructorDeclarationException($this::class);
+        }
 
         /** @psalm-suppress ArgumentTypeCoercion */
         if (!is_a($item, $expectedClass)) {
-            throw new InvalidItemTypeCollectionException($this::class, $expectedClass, $item::class);
+            throw new InvalidItemTypeException($this::class, $expectedClass, $item::class);
         }
     }
 }

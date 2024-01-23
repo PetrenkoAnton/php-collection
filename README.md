@@ -29,15 +29,15 @@ composer require petrenkoanton/php-collection
 
 ### Public methods
 
-| Method                                 | Exception                          |
-|:---------------------------------------|:-----------------------------------|
-| __construct(Collectable ...$items)     | -                                  |
-| add(Collectable $item): void           | InvalidItemTypeCollectionException |
-| filter(callable $callback): Collection | -                                  |
-| getItems(): array                      | -                                  |
-| getItem(int $key): Collectable         | InvalidKeyCollectionException      |
-| first(): Collectable                   | InvalidKeyCollectionException      |
-| count(): int                           | -                                  |
+| Method                                 | Exception                                                              |
+|:---------------------------------------|:-----------------------------------------------------------------------|
+| __construct(Collectable ...$items)     | -                                                                      |
+| add(Collectable $item): void           | InvalidItemTypeException &#124; InvalidConstructorDeclarationException |
+| filter(callable $callback): Collection | -                                                                      |
+| getItems(): array                      | -                                                                      |
+| getItem(int $key): Collectable         | InvalidKeyException                                                    |
+| first(): Collectable                   | InvalidKeyException                                                    |
+| count(): int                           | -                                                                      |
 
 ### Exceptions
 
@@ -45,31 +45,62 @@ Main library exception is [CollectionException](./src/Exception/CollectionExcept
 
 | Code | Message pattern                                               | Exception                              | Parent               |
 |------|:--------------------------------------------------------------|:---------------------------------------|:---------------------|
-| 100  | Collection: %s &#124; Expected item type: %s &#124; Given: %s | InvalidItemTypeCollectionException     | CollectionException  |
-| 200  | Collection: %s &#124; Invalid key: %d                         | InvalidKeyCollectionException          | CollectionException  |
-| 300  | Collection: %s &#124; Err: Invalid constructor declaration    | InvalidConstructorDeclarationException | CollectionException  |
+| 100  | Collection: %s &#124; Expected item type: %s &#124; Given: %s | InvalidItemTypeException               | CollectionException  |
+| 101  | Collection: %s &#124; Err: Invalid constructor declaration    | InvalidConstructorDeclarationException | CollectionException  |
+| 200  | Collection: %s &#124; Invalid key: %d                         | InvalidKeyException                    | CollectionException  |
 
 ## Usage
 
-All collection items must implements `Collection\Collectable` interface:
-
 ```php
+<?php
+
+declare(strict_types=1);
+
+use Collection\Arrayable;
+use Collection\Collectable;
+use Collection\Collection;
+
+// All collection items must implements `Collection\Collectable` interface
 interface EntityInterface extends Collectable
 {
-    // ...
 }
-```
 
-You must call `parent::__construct(...$items);` in your Collection instance:
+class Entity implements Arrayable, EntityInterface
+{
+    public function __construct(private int $id)
+    {
+    }
 
-```php
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function toArray(): array
+    {
+        return ['id' => $this->id];
+    }
+}
+
 class EntityInterfaceCollection extends Collection
 {
     public function __construct(EntityInterface ...$items)
     {
-        parent::__construct(...$items);
+        parent::__construct(...$items); // Mandatory call of the parent constructor
     }
 }
+
+$firstEntity = new Entity(1);
+$secondEntity = new Entity(2);
+
+$collection = new EntityInterfaceCollection($firstEntity);
+$collection->add($secondEntity);
+
+$firstEntityId = $collection->first()->getId(); // 1
+
+$count = $collection->count(); // 2
+
+$collectionAsArray = $collection->toArray() // [['id' => 1], ['id' => 2]];
 ```
 
 ## For developers
