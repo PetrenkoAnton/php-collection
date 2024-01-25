@@ -191,7 +191,7 @@ composer check-all
 ## License
 
 The [php-collection](https://github.com/PetrenkoAnton/php-collection) library is open-sourced software licensed under the
-[MIT license](https://opensource.org/licenses/MIT).
+[MIT license](./LICENSE).
 
 ## Related projects
 
