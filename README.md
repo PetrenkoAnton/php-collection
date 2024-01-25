@@ -29,6 +29,8 @@ composer require petrenkoanton/php-collection
 
 ### Public methods
 
+#### [Collection](./src/Collection.php)
+
 | Method                                 | Exception                                                              |
 |:---------------------------------------|:-----------------------------------------------------------------------|
 | __construct(Collectable ...$items)     | -                                                                      |
