@@ -38,7 +38,7 @@ abstract class Collection implements Arrayable, Collectable, Countable
         $this->items[] = $item;
     }
 
-    public function filter(callable $callback): static
+    public function filter(callable $callback): self
     {
         $copy = clone $this;
         $copy->items = array_values(array_filter($this->items, $callback));
