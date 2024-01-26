@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test;
 
-use Collection\Collection;
 use Collection\Exception\CollectionException;
 use Collection\Exception\CollectionException\InvalidConstructorDeclarationException;
 use Collection\Exception\CollectionException\InvalidItemTypeException;
@@ -27,6 +26,7 @@ use Tests\Fixtures\UnsupportedObjectConstructorWithoutParentCallCollection;
 use TypeError;
 
 use function get_class;
+use function is_a;
 
 /**
  * @psalm-suppress UnusedClass
@@ -38,7 +38,7 @@ class CollectionTest extends TestCase
     private int $fourthEntityId;
     private SecondEntity $secondEntity;
     private FourthEntity $fourthEntity;
-    private Collection $collection;
+    private EntityInterfaceCollection $collection;
 
     public function setUp(): void
     {
@@ -96,8 +96,9 @@ class CollectionTest extends TestCase
         $this->collection->add($this->fourthEntity);
         $this->assertCount(4, $this->collection);
 
-        /** @var Collection $filtered */
+        /** @var EntityInterfaceCollection $filtered */
         $filtered = $this->collection->filter(fn (EntityInterface $item) => $item->getId() > 3);
+        $this->assertTrue(is_a($filtered, EntityInterfaceCollection::class));
 
         $this->assertCount(1, $filtered);
 
